@@ -1,4 +1,5 @@
 import React from 'react';
+import Markup from 'interweave';
 
 function BetterDocument(props) {
   const display_doc = (content_string) => {
@@ -11,7 +12,11 @@ function BetterDocument(props) {
     }
 
     let meta = obj['derived-metadata'];
-    let doctext = meta.text;
+    meta.text =  meta.text.replace( /<body.*?>/,'<div>').replace(/<\/body.*?>/,'</div>')
+    //console.log(meta.text)
+    let doctext = (<Markup tagName="div"
+      className="text-wrap article-text"
+      content={meta.text}/>)
     
     if (props.rel) {
       const start = props.rel.start;

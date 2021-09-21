@@ -1,11 +1,12 @@
 .article-text {
-    font-size: 1.25rem;
-    font-family: georgia,Times New Roman,serif;
-    line-height: 1.75;
-    padding-bottom: 24px;
-    white-space: pre-wrap;
+  font-size: 1.25rem;
+  font-family: georgia, Times New Roman, serif;
+  line-height: 1.75;
+  padding-bottom: 24px;
+  /*white-space: pre-wrap;*/
 }
 
-mark, .mark {
-    background-color: #c0eef8;
+mark,
+.mark {
+  background-color: #c0eef8;
 }

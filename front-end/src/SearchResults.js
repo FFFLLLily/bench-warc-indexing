@@ -11,8 +11,8 @@ class SearchResults extends React.Component {
    * @param {Object} this.props.results the result object from ElasticSearch, see https://www.elastic.co/guide/en/elasticsearch/reference/current/getting-started-search.html
    */
   render() {
-    console.log(this.props.results)
-    console.log(this.props.qrels)
+    //console.log(this.props.results)
+    //console.log(this.props.qrels)
     const hits = this.props.results.hits ? this.props.results.hits.hits : [];
     let qrels = this.props.qrels;
     if (qrels === null) {
