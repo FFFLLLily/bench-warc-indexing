@@ -132,7 +132,7 @@ def read_warc_file(file_path):
                 data_dict = {
                     "_index":index_name,
                     "_id":uid,
-                    "_type":'doc',
+                    "_type":'docs',
                 }
 
                 source_block = {
