@@ -108,6 +108,7 @@ def read_warc_file(file_path):
                     pl = []
                     gl = []
                     ol = []
+                    el = [] # Li: add event entities
                     for ent in spacy_text.ents:
                         if ent.label_ == 'PERSON':
                             pl.append(ent.text)
@@ -115,6 +116,8 @@ def read_warc_file(file_path):
                             gl.append(ent.text)
                         elif ent.label_ == 'ORG':
                             ol.append(ent.text)
+                        elif ent.label_ == 'EVENT':
+                            el.append(ent.text)
                         else:
                             continue
                 else:
@@ -124,8 +127,14 @@ def read_warc_file(file_path):
                     title = soup.title.string
                 else:
                     title = text[:30]
+                  
+                # Li: 'action' parameter for helpers.bulk
+                data_dict = {
+                    "_index":index_name,
+                    "_id":uid,
+                    "_type":'doc',
+                }
 
-                # Insert the document into es index
                 source_block = {
                     "uuid":uid,
                     "title":title,
@@ -140,23 +149,23 @@ def read_warc_file(file_path):
                     "text":text,
                     "PERSON":pl,
                     "ORG":ol,
-                    "GPE":gl
+                    "GPE":gl,
+                    "EVENT":el #Li: add event
                 }
-                print("Indexing: "+uid)
-                try:
-                    es.index(index = index_name, id = uid, body = source_block)
-                except ElasticsearchException as e:
-                    print(e.info)
-                except:
-                    print("Unknown error")
+                
+                data_dict['_source'] = source_block
+                
             except:
                 traceback.print_exc()
-
+            yield data_dict
+            
+# Index
 for root, dirs, files in os.walk(input_dir):
     for file_name in files:
         if(file_name.endswith('.warc.gz')):
             file_path = input_dir + '/' + file_name
-            read_warc_file(file_path)
+            print("Indexing...")
+            helpers.bulk(es, gendata(file_path), request_timeout=30)
 
 '''
 es.indices.put_settings(index=index_name,
