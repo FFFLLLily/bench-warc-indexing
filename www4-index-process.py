@@ -165,7 +165,7 @@ for root, dirs, files in os.walk(input_dir):
         if(file_name.endswith('.warc.gz')):
             file_path = input_dir + '/' + file_name
             print("Indexing...")
-            helpers.bulk(es, gendata(file_path), request_timeout=30)
+            helpers.bulk(es, read_warc_file(file_path), request_timeout=30)
 
 '''
 es.indices.put_settings(index=index_name,
